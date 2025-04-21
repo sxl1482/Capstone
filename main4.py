@@ -23,7 +23,7 @@ def set_background(image_path):
         unsafe_allow_html=True
     )
 
-set_background("streamlit_background.jpg")
+set_background("pictures/streamlit_background.jpg")
 # Load data
 @st.cache_data
 def load_data(url):
