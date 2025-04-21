@@ -1,0 +1,54 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+.venv/
+env/
+venv/
+
+# Streamlit cache and logs
+.streamlit/config.toml
+.streamlit/credentials.toml
+.streamlit/*.log
+.cache/
+**/.ipynb_checkpoints
+
+# Jupyter notebook checkpoints (if any)
+.ipynb_checkpoints/
+
+# Data and model artifacts
+*.csv
+*.tsv
+*.xls
+*.xlsx
+*.feather
+*.parquet
+*.pkl
+*.h5
+*.joblib
+*.json
+
+# Images and other static assets (optional)
+*.png
+*.jpg
+*.jpeg
+*.gif
+
+# OS crap
+.DS_Store
+Thumbs.db
+
+# VSCode
+.vscode/
+
+# Pytest cache
+.pytest_cache/
+
+# Logs
+*.log
+
+# Local environment variables or secrets
+.env
+.env.*
