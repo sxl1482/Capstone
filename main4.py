@@ -3,6 +3,8 @@ import pandas as pd
 import geopandas as gpd
 import matplotlib.pyplot as plt
 import base64
+import plotly.express as px
+
 
 
 def set_background(image_path):
