@@ -49,7 +49,7 @@ state_df = df[df['State'] == state_selected]
 predicted_row = state_df[state_df['Week'] == week_input]
 if not predicted_row.empty:
     predicted_value = predicted_row['cases_per_100k'].values[0]
-    st.markdown(f"### {state_selected}'s Predicted Flu Cases per 100,000 in Week {week_input}: **{predicted_value:.1f}**")
+    st.markdown(f"### {state_selected}'s Predicted Flu Cases in Week {week_input}: **{predicted_value:.1f} cases per 100,000**")
 else:
     st.markdown(f"### No prediction available for {state_selected} in Week {week_input}.")
 
