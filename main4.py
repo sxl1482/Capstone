@@ -45,6 +45,14 @@ week_input = st.slider("Select Week:", min_value=1, max_value=27, value=10)
 # Data filtering
 state_df = df[df['State'] == state_selected]
 
+# Display predicted value for selected state and week
+predicted_row = state_df[state_df['Week'] == week_input]
+if not predicted_row.empty:
+    predicted_value = predicted_row['cases_per_100k'].values[0]
+    st.markdown(f"### {state_selected}'s Predicted Flu Cases per 100,000 in Week {week_input}: **{predicted_value:.1f}**")
+else:
+    st.markdown(f"### No prediction available for {state_selected} in Week {week_input}.")
+
 # Forecast next 3 weeks from input
 forecast_df = state_df[(state_df['Week'] > week_input) & (state_df['Week'] <= week_input + 3)]
 st.subheader(f"Forecast for Weeks {week_input + 1} to {week_input + 3}")
