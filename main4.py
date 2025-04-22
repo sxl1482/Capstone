@@ -45,70 +45,66 @@ week_input = st.slider("Select Week:", min_value=1, max_value=27, value=10)
 # Data filtering
 state_df = df[df['State'] == state_selected]
 
-# Display predicted value for selected state and week
+#Prediicted Cases
 predicted_row = state_df[state_df['Week'] == week_input]
 if not predicted_row.empty:
     predicted_value = predicted_row['cases_per_100k'].values[0]
-    st.markdown(f"### {state_selected}'s Predicted Flu Cases in Week {week_input}: **{predicted_value:.1f} cases per 100,000**")
+    st.markdown(f"### {state_selected}'s Predicted Flu Cases in Week {week_input}:<br>**{predicted_value:.1f} cases per 100,000**", unsafe_allow_html=True)
 else:
     st.markdown(f"### No prediction available for {state_selected} in Week {week_input}.")
 
+
 # Forecast next 3 weeks from input
 forecast_df = state_df[(state_df['Week'] > week_input) & (state_df['Week'] <= week_input + 3)]
-st.subheader(f"Forecast for Weeks {week_input + 1} to {week_input + 3}")
-
-fig, ax = plt.subplots()
-
-# Make sure the data is sorted and clean
 forecast_df = forecast_df.sort_values('Week')
 forecast_df = forecast_df.dropna(subset=['cases_per_100k'])
 
-# Only plot if we have more than one data point
-if len(forecast_df) > 1:
-    ax.plot(forecast_df['Week'], forecast_df['cases_per_100k'], marker='o', color='white', linestyle='-')
-else:
-    ax.scatter(forecast_df['Week'], forecast_df['cases_per_100k'], color='white')
-    ax.text(
-        forecast_df['Week'].values[0],
-        forecast_df['cases_per_100k'].values[0] + 0.5,
-        f"{forecast_df['cases_per_100k'].values[0]:.1f}",
-        color='white',
-        ha='center'
+st.subheader(f"Forecast for Weeks {week_input + 1} to {week_input + 3}")
+
+if not forecast_df.empty:
+    fig = px.line(
+        forecast_df,
+        x='Week',
+        y='cases_per_100k',
+        markers=True,
+        title=f"3-Week Forecast for {state_selected} from Week {week_input}",
+        hover_data={'Week': True, 'cases_per_100k': ':.1f'}
     )
+    fig.update_traces(line=dict(color='white'), marker=dict(color='white'))
+    fig.update_layout(
+        paper_bgcolor='#0a1528',
+        plot_bgcolor='#0a1528',
+        font_color='white'
+    )
+    st.plotly_chart(fig)
+else:
+    st.markdown("No forecast data available.")
 
-ax.set_title(f"3-Week Forecast for {state_selected} from Week {week_input}", color='white')
-ax.set_xlabel('Week', color='white')
-ax.set_ylabel('Cases per 100k', color='white')
-ax.tick_params(colors='white')
-fig.patch.set_alpha(0)
-ax.set_facecolor('none')
-st.pyplot(fig)
-
-# Forecast until week 30
+#Forecast30
 forecast_to_30_df = state_df[(state_df['Week'] > week_input) & (state_df['Week'] <= 30)]
+forecast_to_30_df = forecast_to_30_df.sort_values('Week').dropna(subset=['cases_per_100k'])
+
 st.subheader(f"Extended Forecast from Week {week_input + 1} to Week 30")
 
-fig2, ax2 = plt.subplots()
-ax2.plot(forecast_to_30_df['Week'], forecast_to_30_df['cases_per_100k'], marker='o', color='white')
-
-# Add value labels above each point
-for i, row in forecast_to_30_df.iterrows():
-    ax2.text(
-        row['Week'],
-        row['cases_per_100k'] + 0.5,  # offset for visibility
-        f"{row['cases_per_100k']:.1f}",
-        color='white',
-        ha='center',
-        fontsize=9
+if not forecast_to_30_df.empty:
+    fig2 = px.line(
+        forecast_to_30_df,
+        x='Week',
+        y='cases_per_100k',
+        markers=True,
+        title=f"Forecast until Week 30 for {state_selected}",
+        hover_data={'Week': True, 'cases_per_100k': ':.1f'}
     )
+    fig2.update_traces(line=dict(color='white'), marker=dict(color='white'))
+    fig2.update_layout(
+        paper_bgcolor='#0a1528',
+        plot_bgcolor='#0a1528',
+        font_color='white'
+    )
+    st.plotly_chart(fig2)
+else:
+    st.markdown("No forecast data available.")
 
-ax2.set_title(f"Forecast until Week 30 for {state_selected}", color='white')
-ax2.set_xlabel('Week', color='white')
-ax2.set_ylabel('Cases per 100k', color='white')
-ax2.tick_params(colors='white')
-fig2.patch.set_alpha(0)
-ax2.set_facecolor('none')
-st.pyplot(fig2)
 
 
 import plotly.express as px
