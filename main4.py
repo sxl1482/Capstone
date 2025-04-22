@@ -38,11 +38,11 @@ df = load_data(url)
 df = df[df['Year'] == 2025]
 
 # Streamlit interface
-st.title("Flu Forecast Visualization (2025)")
+st.title("2025 Flu Forecast Dashboard")
 
 # User inputs
-state_selected = st.selectbox("Select State:", options=df['State'].unique())
-week_input = st.slider("Select Week:", min_value=1, max_value=27, value=10)
+state_selected = st.selectbox("Please Select a State:", options=df['State'].unique())
+week_input = st.slider("Please Select a Week:", min_value=1, max_value=27, value=10)
 
 # Data filtering
 state_df = df[df['State'] == state_selected]
