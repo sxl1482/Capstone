@@ -157,7 +157,7 @@ if highlight_state_code:
         mode="markers+text",
         marker=dict(
             size=0.1,  # invisible marker
-            line=dict(width=4, color='cyan')  # glowing outline
+            line=dict(width=5, color='green')  # glowing outline
         ),
         name=f"{state_selected} (Selected)",
         showlegend=False,
