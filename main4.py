@@ -58,17 +58,22 @@ forecast_df = state_df[(state_df['Week'] > week_input) & (state_df['Week'] <= we
 st.subheader(f"Forecast for Weeks {week_input + 1} to {week_input + 3}")
 
 fig, ax = plt.subplots()
-ax.plot(forecast_df['Week'], forecast_df['cases_per_100k'], marker='o', color='white')
 
-# Add value labels above each point
-for i, row in forecast_df.iterrows():
+# Make sure the data is sorted and clean
+forecast_df = forecast_df.sort_values('Week')
+forecast_df = forecast_df.dropna(subset=['cases_per_100k'])
+
+# Only plot if we have more than one data point
+if len(forecast_df) > 1:
+    ax.plot(forecast_df['Week'], forecast_df['cases_per_100k'], marker='o', color='white', linestyle='-')
+else:
+    ax.scatter(forecast_df['Week'], forecast_df['cases_per_100k'], color='white')
     ax.text(
-        row['Week'], 
-        row['cases_per_100k'] + 0.5,  # slight vertical offset
-        f"{row['cases_per_100k']:.1f}", 
-        color='white', 
-        ha='center',
-        fontsize=9
+        forecast_df['Week'].values[0],
+        forecast_df['cases_per_100k'].values[0] + 0.5,
+        f"{forecast_df['cases_per_100k'].values[0]:.1f}",
+        color='white',
+        ha='center'
     )
 
 ax.set_title(f"3-Week Forecast for {state_selected} from Week {week_input}", color='white')
@@ -143,6 +148,25 @@ fig.update_layout(
     paper_bgcolor='#0a1528',
     font_color='white',
 )
+# Add outline/highlight for selected state
+highlight_state_code = state_abbrev.get(state_selected)
+
+if highlight_state_code:
+    fig.add_scattergeo(
+        locations=[highlight_state_code],
+        locationmode="USA-states",
+        geo="geo",
+        mode="markers+text",
+        marker=dict(
+            size=0.1,  # invisible marker
+            line=dict(width=4, color='cyan')  # glowing outline
+        ),
+        name=f"{state_selected} (Selected)",
+        showlegend=False,
+        text=[state_selected],
+        textposition="top center",
+        hoverinfo="skip"
+    )
 
 st.plotly_chart(fig)
 
