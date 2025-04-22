@@ -56,8 +56,21 @@ else:
 # Forecast next 3 weeks from input
 forecast_df = state_df[(state_df['Week'] > week_input) & (state_df['Week'] <= week_input + 3)]
 st.subheader(f"Forecast for Weeks {week_input + 1} to {week_input + 3}")
+
 fig, ax = plt.subplots()
 ax.plot(forecast_df['Week'], forecast_df['cases_per_100k'], marker='o', color='white')
+
+# Add value labels above each point
+for i, row in forecast_df.iterrows():
+    ax.text(
+        row['Week'], 
+        row['cases_per_100k'] + 0.5,  # slight vertical offset
+        f"{row['cases_per_100k']:.1f}", 
+        color='white', 
+        ha='center',
+        fontsize=9
+    )
+
 ax.set_title(f"3-Week Forecast for {state_selected} from Week {week_input}", color='white')
 ax.set_xlabel('Week', color='white')
 ax.set_ylabel('Cases per 100k', color='white')
@@ -69,8 +82,21 @@ st.pyplot(fig)
 # Forecast until week 30
 forecast_to_30_df = state_df[(state_df['Week'] > week_input) & (state_df['Week'] <= 30)]
 st.subheader(f"Extended Forecast from Week {week_input + 1} to Week 30")
+
 fig2, ax2 = plt.subplots()
 ax2.plot(forecast_to_30_df['Week'], forecast_to_30_df['cases_per_100k'], marker='o', color='white')
+
+# Add value labels above each point
+for i, row in forecast_to_30_df.iterrows():
+    ax2.text(
+        row['Week'],
+        row['cases_per_100k'] + 0.5,  # offset for visibility
+        f"{row['cases_per_100k']:.1f}",
+        color='white',
+        ha='center',
+        fontsize=9
+    )
+
 ax2.set_title(f"Forecast until Week 30 for {state_selected}", color='white')
 ax2.set_xlabel('Week', color='white')
 ax2.set_ylabel('Cases per 100k', color='white')
@@ -79,49 +105,47 @@ fig2.patch.set_alpha(0)
 ax2.set_facecolor('none')
 st.pyplot(fig2)
 
-import matplotlib as mpl
 
-# US map visualization using Geopandas
-st.subheader(f"US States Cases per 100k in Week {week_input}")
+import plotly.express as px
 
-# Geopandas US States shape file
-usa = gpd.read_file('https://raw.githubusercontent.com/PublicaMundi/MappingAPI/master/data/geojson/us-states.json')
+# Convert state name to abbreviation
+state_abbrev = {
+    'Alabama': 'AL', 'Alaska': 'AK', 'Arizona': 'AZ', 'Arkansas': 'AR', 'California': 'CA',
+    'Colorado': 'CO', 'Connecticut': 'CT', 'Delaware': 'DE', 'Florida': 'FL', 'Georgia': 'GA',
+    'Hawaii': 'HI', 'Idaho': 'ID', 'Illinois': 'IL', 'Indiana': 'IN', 'Iowa': 'IA',
+    'Kansas': 'KS', 'Kentucky': 'KY', 'Louisiana': 'LA', 'Maine': 'ME', 'Maryland': 'MD',
+    'Massachusetts': 'MA', 'Michigan': 'MI', 'Minnesota': 'MN', 'Mississippi': 'MS',
+    'Missouri': 'MO', 'Montana': 'MT', 'Nebraska': 'NE', 'Nevada': 'NV', 'New Hampshire': 'NH',
+    'New Jersey': 'NJ', 'New Mexico': 'NM', 'New York': 'NY', 'North Carolina': 'NC',
+    'North Dakota': 'ND', 'Ohio': 'OH', 'Oklahoma': 'OK', 'Oregon': 'OR', 'Pennsylvania': 'PA',
+    'Rhode Island': 'RI', 'South Carolina': 'SC', 'South Dakota': 'SD', 'Tennessee': 'TN',
+    'Texas': 'TX', 'Utah': 'UT', 'Vermont': 'VT', 'Virginia': 'VA', 'Washington': 'WA',
+    'West Virginia': 'WV', 'Wisconsin': 'WI', 'Wyoming': 'WY', 'District of Columbia': 'DC'
+}
+
 week_df = df[df['Week'] == week_input].copy()
-week_df = week_df.rename(columns={"State": "name"})
-us_map = usa.merge(week_df, on='name', how='left')
+week_df['code'] = week_df['State'].map(state_abbrev)
 
-# Avoid NaNs
-us_map['cases_per_100k'] = us_map['cases_per_100k'].fillna(0)
-
-# Define colormap
-cmap = mpl.cm.Oranges
-norm = mpl.colors.Normalize(vmin=us_map['cases_per_100k'].min(), vmax=us_map['cases_per_100k'].max())
-
-fig3, ax3 = plt.subplots(figsize=(15, 10))
-us_map.plot(
-    column='cases_per_100k',
-    cmap=cmap,
-    linewidth=0.8,
-    ax=ax3,
-    edgecolor='0.8'
+fig = px.choropleth(
+    week_df,
+    locations='code',
+    locationmode='USA-states',
+    color='cases_per_100k',
+    scope='usa',
+    color_continuous_scale='Oranges',
+    hover_name='State',
+    hover_data={'cases_per_100k': ':.1f'},
+    title=f"Flu Cases per 100,000 by State – Week {week_input}"
 )
 
-# Custom colorbar with white text
-sm = mpl.cm.ScalarMappable(cmap=cmap, norm=norm)
-sm._A = []  # Required for ScalarMappable to work in matplotlib
+fig.update_layout(
+    geo=dict(bgcolor='rgba(0,0,0,0)'),
+    paper_bgcolor='#0a1528',
+    font_color='white',
+)
 
-cbar = fig3.colorbar(sm, ax=ax3, orientation="vertical", fraction=0.03, pad=0.01)
-cbar.set_label("Cases per 100k", color='white')
-cbar.ax.yaxis.set_tick_params(color='white')
-plt.setp(plt.getp(cbar.ax.axes, 'yticklabels'), color='white')
+st.plotly_chart(fig)
 
-# Finish styling
-ax3.set_title(f"Cases per 100k by State in Week {week_input}", fontsize=16, color='white')
-ax3.axis('off')
-fig3.patch.set_alpha(0)
-ax3.set_facecolor('none')
-
-st.pyplot(fig3)
 
 
 
