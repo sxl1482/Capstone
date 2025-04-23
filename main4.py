@@ -58,11 +58,11 @@ else:
 
 import plotly.express as px
 
-# --- 3-week forecast ---
-forecast_df = state_df[(state_df['Week'] > week_input) & (state_df['Week'] <= week_input + 3)]
+# --- 3-week forecast (Week X to X+2) ---
+forecast_df = state_df[(state_df['Week'] >= week_input) & (state_df['Week'] <= week_input + 2)]
 forecast_df = forecast_df.sort_values('Week').dropna(subset=['cases_per_100k'])
 
-st.subheader(f"Flu Forecasts for Weeks {week_input + 1} to {week_input + 3}")
+st.subheader(f"Flu Forecasts for Weeks {week_input} to {week_input + 2}")
 
 if not forecast_df.empty:
     fig = px.line(
@@ -70,13 +70,13 @@ if not forecast_df.empty:
         x='Week',
         y='cases_per_100k',
         markers=True,
-        title=f"3-Week Forecast for {state_selected} from Week {week_input}",
+        title=f"3-Week Forecast for {state_selected} (Weeks {week_input} to {week_input + 2})",
         hover_data={'Week': True, 'cases_per_100k': ':.1f'}
     )
     fig.update_traces(
         line=dict(color='white'),
         marker=dict(color='white'),
-        hoverlabel=dict(font=dict(size=16))  # Tooltip font size
+        hoverlabel=dict(font=dict(size=16))
     )
     fig.update_layout(
         paper_bgcolor='#0a1528',
@@ -87,11 +87,12 @@ if not forecast_df.empty:
 else:
     st.markdown("No forecast data available.")
 
-# --- Forecast to week 30 ---
-forecast_to_30_df = state_df[(state_df['Week'] > week_input) & (state_df['Week'] <= 30)]
+
+# --- Extended forecast (Week X to Week 30) ---
+forecast_to_30_df = state_df[(state_df['Week'] >= week_input) & (state_df['Week'] <= 30)]
 forecast_to_30_df = forecast_to_30_df.sort_values('Week').dropna(subset=['cases_per_100k'])
 
-st.subheader(f"Extended Flu Forecasts for Week {week_input + 1} to Week 30")
+st.subheader(f"Extended Flu Forecasts for Weeks {week_input} to 30")
 
 if not forecast_to_30_df.empty:
     fig2 = px.line(
@@ -99,13 +100,13 @@ if not forecast_to_30_df.empty:
         x='Week',
         y='cases_per_100k',
         markers=True,
-        title=f"Forecast until Week 30 for {state_selected}",
+        title=f"Extended Forecast for {state_selected} (Weeks {week_input} to 30)",
         hover_data={'Week': True, 'cases_per_100k': ':.1f'}
     )
     fig2.update_traces(
         line=dict(color='white'),
         marker=dict(color='white'),
-        hoverlabel=dict(font=dict(size=16))  # Tooltip font size
+        hoverlabel=dict(font=dict(size=16))
     )
     fig2.update_layout(
         paper_bgcolor='#0a1528',
