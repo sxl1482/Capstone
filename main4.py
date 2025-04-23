@@ -145,18 +145,30 @@ fig = px.choropleth(
     locationmode='USA-states',
     color='cases_per_100k',
     scope='usa',
-    color_continuous_scale=["#FFF9C4", "#FFE082", "#FFAB91"],  # Yellow → Orange → Red
+    color_continuous_scale=["#FFF9C4", "#FFE082", "#E57373"],  # Yellow → Orange → Red
     hover_name='State',
     hover_data={'cases_per_100k': ':.1f'},
     title=f"Flu Cases per 100,000 by State – Week {week_input}"
 )
 
 fig.update_layout(
-    geo=dict(bgcolor='rgba(0,0,0,0)'),
+    geo=dict(
+        bgcolor='rgba(0,0,0,0)',
+        lakecolor='rgba(0,0,0,0)',
+        showlakes=False,
+        showland=True,
+        landcolor='rgba(0,0,0,0)',
+        subunitcolor='gray',
+        showcountries=False,
+        showstates=True,
+        showframe=False,
+        projection_type='albers usa'
+    ),
     paper_bgcolor='#0a1528',
-    font_color='white',
-    hoverlabel=dict(font=dict(size=16))  # Tooltip font size for map
+    font_color='black',
+    hoverlabel=dict(font=dict(size=16))
 )
+
 
 # Highlight user-selected state
 highlight_state_code = state_abbrev.get(state_selected)
