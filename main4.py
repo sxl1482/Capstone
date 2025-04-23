@@ -139,8 +139,7 @@ week_df = df[df['Week'] == week_input].copy()
 week_df['code'] = week_df['State'].map(state_abbrev)
 
 import pandas as pd
-
-# Categorize cases into risk levels
+# Assign risk levels based on case thresholds
 def get_risk_level(cases):
     if cases < 5:
         return 'Minimal'
@@ -151,7 +150,10 @@ def get_risk_level(cases):
     else:
         return 'High'
 
-# Add risk column to DataFrame
+# Apply function to create the column
+week_df['risk_level'] = week_df['cases_per_100k'].apply(get_risk_level)
+
+# THEN convert to ordered categorical
 risk_order = ['Minimal', 'Low', 'Medium', 'High']
 week_df['risk_level'] = pd.Categorical(week_df['risk_level'], categories=risk_order, ordered=True)
 
