@@ -154,20 +154,21 @@ fig = px.choropleth(
 fig.update_layout(
     geo=dict(
         bgcolor='rgba(0,0,0,0)',
-        lakecolor='rgba(0,0,0,0)',
         showlakes=False,
         showland=True,
         landcolor='rgba(0,0,0,0)',
-        subunitcolor='gray',
+        showframe=False,
+        showcoastlines=False,
         showcountries=False,
         showstates=True,
-        showframe=False,
-        projection_type='albers usa'
+        projection_type='albers usa',
+        lakecolor='rgba(0,0,0,0)',
     ),
     paper_bgcolor='#0a1528',
     font_color='black',
     hoverlabel=dict(font=dict(size=16))
 )
+
 
 
 # Highlight user-selected state
