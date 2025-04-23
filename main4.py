@@ -63,12 +63,19 @@ if not predicted_row.empty:
         risk_level = 'High'
 
     st.markdown(f"""
-        ### {state_selected}'s Predicted Flu Cases in Week {week_input}:<br>
-        **{predicted_value:.2f} cases per 100,000**  
-        <span style='font-size: 20px;'>Flu Risk Level: <strong>{risk_level}</strong></span>
+        <div style='font-size: 22px; font-weight: bold;'>
+            {state_selected}'s Predicted Flu Cases in Week {week_input}:
+        </div>
+        <div style='font-size: 36px; font-weight: bold; margin-top: 4px;'>
+            {predicted_value:.1f} cases per 100,000
+        </div>
+        <div style='font-size: 20px; margin-top: 6px;'>
+            🦠 Risk Level: <strong>{risk_level}</strong>
+        </div>
     """, unsafe_allow_html=True)
 else:
     st.markdown(f"### No prediction available for {state_selected} in Week {week_input}.")
+
 
 
 import plotly.express as px
