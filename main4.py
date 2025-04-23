@@ -138,17 +138,40 @@ state_abbrev = {
 week_df = df[df['Week'] == week_input].copy()
 week_df['code'] = week_df['State'].map(state_abbrev)
 
+import pandas as pd
+
+# Categorize cases into risk levels
+def get_risk_level(cases):
+    if cases < 5:
+        return 'Minimal'
+    elif cases < 15:
+        return 'Low'
+    elif cases < 30:
+        return 'Medium'
+    else:
+        return 'High'
+
+# Add risk column to DataFrame
+week_df['risk_level'] = week_df['cases_per_100k'].apply(get_risk_level)
+
+# Define discrete color mapping
+risk_colors = {
+    'Minimal': '#FFF9C4',  # pastel yellow
+    'Low':     '#FFE082',  # soft orange
+    'Medium':  '#FFB74D',  # deeper orange
+    'High':    '#E57373'   # darker pastel red
+}
 
 fig = px.choropleth(
     week_df,
     locations='code',
     locationmode='USA-states',
-    color='cases_per_100k',
+    color='risk_level',
+    color_discrete_map=risk_colors,
     scope='usa',
-    color_continuous_scale=["#FFF9C4", "#FFE082", "#E57373"],  # Yellow → Orange → Red
     hover_name='State',
-    hover_data={'cases_per_100k': ':.1f'},
-    title=f"Flu Cases per 100,000 by State – Week {week_input}"
+    hover_data={'cases_per_100k': ':.1f', 'risk_level': True},
+    title=f"Flu Risk Level by State – Week {week_input}"
 )
 
 fig.update_layout(
@@ -157,16 +180,14 @@ fig.update_layout(
         showland=True,
         landcolor='rgba(0,0,0,0)',
         showframe=False,
-        projection=dict(type='albers usa')  # ← CORRECT SYNTAX
+        projection=dict(type='albers usa')
     ),
     paper_bgcolor='#0a1528',
     font_color='white',
     hoverlabel=dict(font=dict(size=16))
 )
 
-
-# Highlight user-selected state
-highlight_state_code = state_abbrev.get(state_selected)
+# Optional: Add selected state outline (keep this if you already use it)
 if highlight_state_code:
     fig.add_scattergeo(
         locations=[highlight_state_code],
@@ -185,7 +206,6 @@ if highlight_state_code:
     )
 
 st.plotly_chart(fig)
-
 
 
 
