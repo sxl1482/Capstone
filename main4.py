@@ -152,7 +152,8 @@ def get_risk_level(cases):
         return 'High'
 
 # Add risk column to DataFrame
-week_df['risk_level'] = week_df['cases_per_100k'].apply(get_risk_level)
+risk_order = ['Minimal', 'Low', 'Medium', 'High']
+week_df['risk_level'] = pd.Categorical(week_df['risk_level'], categories=risk_order, ordered=True)
 
 # Define discrete color mapping
 risk_colors = {
@@ -167,6 +168,7 @@ fig = px.choropleth(
     locations='code',
     locationmode='USA-states',
     color='risk_level',
+    category_orders={'risk_level': risk_order},  # <-- forces correct legend order
     color_discrete_map=risk_colors,
     scope='usa',
     hover_name='State',
@@ -188,6 +190,7 @@ fig.update_layout(
 )
 
 highlight_state_code = state_abbrev.get(state_selected)
+
 # Optional: Add selected state outline (keep this if you already use it)
 if highlight_state_code:
     fig.add_scattergeo(
@@ -197,7 +200,7 @@ if highlight_state_code:
         mode="markers+text",
         marker=dict(
             size=0.1,
-            line=dict(width=5, color='green')
+            line=dict(width=8, color='green')
         ),
         name=f"{state_selected} (Selected)",
         showlegend=False,
