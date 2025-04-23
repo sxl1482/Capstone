@@ -70,7 +70,7 @@ if not predicted_row.empty:
             {predicted_value:.1f} cases per 100,000
         </div>
         <div style='font-size: 20px; margin-top: 6px;'>
-            🦠 Risk Level: <strong>{risk_level}</strong>
+            Weekly Flu Risk Level: <strong>{risk_level}</strong>
         </div>
     """, unsafe_allow_html=True)
 else:
