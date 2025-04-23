@@ -51,7 +51,22 @@ state_df = df[df['State'] == state_selected]
 predicted_row = state_df[state_df['Week'] == week_input]
 if not predicted_row.empty:
     predicted_value = predicted_row['cases_per_100k'].values[0]
-    st.markdown(f"### {state_selected}'s Predicted Flu Cases in Week {week_input}:<br>**{predicted_value:.1f} cases per 100,000**", unsafe_allow_html=True)
+
+    # Determine risk level
+    if predicted_value < 5:
+        risk_level = 'Minimal'
+    elif predicted_value < 15:
+        risk_level = 'Low'
+    elif predicted_value < 30:
+        risk_level = 'Medium'
+    else:
+        risk_level = 'High'
+
+    st.markdown(f"""
+        ### {state_selected}'s Predicted Flu Cases in Week {week_input}:<br>
+        **{predicted_value:.2f} cases per 100,000**  
+        <span style='font-size: 20px;'>Flu Risk Level: <strong>{risk_level}</strong></span>
+    """, unsafe_allow_html=True)
 else:
     st.markdown(f"### No prediction available for {state_selected} in Week {week_input}.")
 
