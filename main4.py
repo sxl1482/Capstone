@@ -38,7 +38,7 @@ df = load_data(url)
 df = df[df['Year'] == 2025]
 
 # Streamlit interface
-st.title("2025 Flu Forecast Dashboard")
+st.title("Flu Forecast Dashboard for 2025")
 
 # User inputs
 state_selected = st.selectbox("Please Select a State:", options=df['State'].unique())
@@ -56,12 +56,13 @@ else:
     st.markdown(f"### No prediction available for {state_selected} in Week {week_input}.")
 
 
-# Forecast next 3 weeks from input
-forecast_df = state_df[(state_df['Week'] > week_input) & (state_df['Week'] <= week_input + 3)]
-forecast_df = forecast_df.sort_values('Week')
-forecast_df = forecast_df.dropna(subset=['cases_per_100k'])
+import plotly.express as px
 
-st.subheader(f"Forecast for Weeks {week_input + 1} to {week_input + 3}")
+# --- 3-week forecast ---
+forecast_df = state_df[(state_df['Week'] > week_input) & (state_df['Week'] <= week_input + 3)]
+forecast_df = forecast_df.sort_values('Week').dropna(subset=['cases_per_100k'])
+
+st.subheader(f"Flu Forecasts for Weeks {week_input + 1} to {week_input + 3}")
 
 if not forecast_df.empty:
     fig = px.line(
@@ -72,7 +73,11 @@ if not forecast_df.empty:
         title=f"3-Week Forecast for {state_selected} from Week {week_input}",
         hover_data={'Week': True, 'cases_per_100k': ':.1f'}
     )
-    fig.update_traces(line=dict(color='white'), marker=dict(color='white'))
+    fig.update_traces(
+        line=dict(color='white'),
+        marker=dict(color='white'),
+        hoverlabel=dict(font=dict(size=16))  # Tooltip font size
+    )
     fig.update_layout(
         paper_bgcolor='#0a1528',
         plot_bgcolor='#0a1528',
@@ -82,11 +87,11 @@ if not forecast_df.empty:
 else:
     st.markdown("No forecast data available.")
 
-#Forecast30
+# --- Forecast to week 30 ---
 forecast_to_30_df = state_df[(state_df['Week'] > week_input) & (state_df['Week'] <= 30)]
 forecast_to_30_df = forecast_to_30_df.sort_values('Week').dropna(subset=['cases_per_100k'])
 
-st.subheader(f"Extended Forecast from Week {week_input + 1} to Week 30")
+st.subheader(f"Extended Flu Forecasts for Week {week_input + 1} to Week 30")
 
 if not forecast_to_30_df.empty:
     fig2 = px.line(
@@ -97,7 +102,11 @@ if not forecast_to_30_df.empty:
         title=f"Forecast until Week 30 for {state_selected}",
         hover_data={'Week': True, 'cases_per_100k': ':.1f'}
     )
-    fig2.update_traces(line=dict(color='white'), marker=dict(color='white'))
+    fig2.update_traces(
+        line=dict(color='white'),
+        marker=dict(color='white'),
+        hoverlabel=dict(font=dict(size=16))  # Tooltip font size
+    )
     fig2.update_layout(
         paper_bgcolor='#0a1528',
         plot_bgcolor='#0a1528',
@@ -107,24 +116,8 @@ if not forecast_to_30_df.empty:
 else:
     st.markdown("No forecast data available.")
 
-
-
-import plotly.express as px
-
-# Convert state name to abbreviation
-state_abbrev = {
-    'Alabama': 'AL', 'Alaska': 'AK', 'Arizona': 'AZ', 'Arkansas': 'AR', 'California': 'CA',
-    'Colorado': 'CO', 'Connecticut': 'CT', 'Delaware': 'DE', 'Florida': 'FL', 'Georgia': 'GA',
-    'Hawaii': 'HI', 'Idaho': 'ID', 'Illinois': 'IL', 'Indiana': 'IN', 'Iowa': 'IA',
-    'Kansas': 'KS', 'Kentucky': 'KY', 'Louisiana': 'LA', 'Maine': 'ME', 'Maryland': 'MD',
-    'Massachusetts': 'MA', 'Michigan': 'MI', 'Minnesota': 'MN', 'Mississippi': 'MS',
-    'Missouri': 'MO', 'Montana': 'MT', 'Nebraska': 'NE', 'Nevada': 'NV', 'New Hampshire': 'NH',
-    'New Jersey': 'NJ', 'New Mexico': 'NM', 'New York': 'NY', 'North Carolina': 'NC',
-    'North Dakota': 'ND', 'Ohio': 'OH', 'Oklahoma': 'OK', 'Oregon': 'OR', 'Pennsylvania': 'PA',
-    'Rhode Island': 'RI', 'South Carolina': 'SC', 'South Dakota': 'SD', 'Tennessee': 'TN',
-    'Texas': 'TX', 'Utah': 'UT', 'Vermont': 'VT', 'Virginia': 'VA', 'Washington': 'WA',
-    'West Virginia': 'WV', 'Wisconsin': 'WI', 'Wyoming': 'WY', 'District of Columbia': 'DC'
-}
+# --- Choropleth Map ---
+st.subheader(f"Flu Forecasts Across the US in Week {week_input}")
 
 week_df = df[df['Week'] == week_input].copy()
 week_df['code'] = week_df['State'].map(state_abbrev)
@@ -135,7 +128,7 @@ fig = px.choropleth(
     locationmode='USA-states',
     color='cases_per_100k',
     scope='usa',
-    color_continuous_scale='Oranges',
+    color_continuous_scale=["#FFFF00", "#FFA500", "#FF0000"],  # Yellow → Orange → Red
     hover_name='State',
     hover_data={'cases_per_100k': ':.1f'},
     title=f"Flu Cases per 100,000 by State – Week {week_input}"
@@ -145,10 +138,11 @@ fig.update_layout(
     geo=dict(bgcolor='rgba(0,0,0,0)'),
     paper_bgcolor='#0a1528',
     font_color='white',
+    hoverlabel=dict(font=dict(size=16))  # Tooltip font size for map
 )
-# Add outline/highlight for selected state
-highlight_state_code = state_abbrev.get(state_selected)
 
+# Highlight user-selected state
+highlight_state_code = state_abbrev.get(state_selected)
 if highlight_state_code:
     fig.add_scattergeo(
         locations=[highlight_state_code],
@@ -156,8 +150,8 @@ if highlight_state_code:
         geo="geo",
         mode="markers+text",
         marker=dict(
-            size=0.1,  # invisible marker
-            line=dict(width=5, color='green')  # glowing outline
+            size=0.1,
+            line=dict(width=5, color='green')
         ),
         name=f"{state_selected} (Selected)",
         showlegend=False,
@@ -167,6 +161,7 @@ if highlight_state_code:
     )
 
 st.plotly_chart(fig)
+
 
 
 
