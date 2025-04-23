@@ -187,6 +187,7 @@ fig.update_layout(
     hoverlabel=dict(font=dict(size=16))
 )
 
+highlight_state_code = state_abbrev.get(state_selected)
 # Optional: Add selected state outline (keep this if you already use it)
 if highlight_state_code:
     fig.add_scattergeo(
