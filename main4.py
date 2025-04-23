@@ -156,10 +156,10 @@ week_df['risk_level'] = week_df['cases_per_100k'].apply(get_risk_level)
 
 # Define discrete color mapping
 risk_colors = {
-    'Minimal': '#FFF9C4',  # pastel yellow
-    'Low':     '#FFE082',  # soft orange
-    'Medium':  '#FFB74D',  # deeper orange
-    'High':    '#E57373'   # darker pastel red
+    'Minimal': '#FDFD96',  # bright pastel yellow (lemon sorbet)
+    'Low':     '#FFB347',  # vivid orange (apricot)
+    'Medium':  '#FF7043',  # punchy orange-red (melon red)
+    'High':    '#D32F2F'   # deep red (crimson danger)
 }
 
 fig = px.choropleth(
