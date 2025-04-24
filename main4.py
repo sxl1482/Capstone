@@ -236,6 +236,65 @@ if highlight_state_code:
 
 st.plotly_chart(fig)
 
+# Mitigation recommendations dictionary
+mitigation_guidance = {
+    'Minimal': """
+**🧑‍⚕️ Public Health Officials**
+- Maintain routine flu surveillance and update emergency response protocols.  
+- Stockpile antivirals, testing kits, and PPE.  
+- Prepare vaccination outreach materials and risk communication templates.  
+- Promote general wellness campaigns (nutrition, physical activity, sleep hygiene).  
+
+**👥 General Population**
+- Practice routine hygiene (handwashing, covering coughs).  
+- Stay current with annual flu vaccinations.  
+- Maintain healthy lifestyle: balanced nutrition, exercise, sleep.  
+- Ensure adequate vitamin intake (especially D and C) through food or supplements.
+""",
+    'Low': """
+**🧑‍⚕️ Public Health Officials**
+- Begin early communication with local agencies and community partners.  
+- Emphasize flu vaccination in schools, elder care facilities, and workplaces.  
+- Coordinate with pharmacies on vitamin supplement supply (especially D and C).  
+- Share risk trends with providers and EMS for mild prep measures.  
+
+**👥 General Population**
+- Get vaccinated if not done yet.  
+- Begin limiting non-essential exposure to crowded areas.  
+- Boost intake of immune-supporting foods: citrus, fatty fish, cereals, greens.
+""",
+    'Medium': """
+**🧑‍⚕️ Public Health Officials**
+- Expand targeted vaccination campaigns in higher-risk regions.  
+- Distribute regional health alerts (symptoms, when to seek care).  
+- Increase access to testing.  
+- Support nutritional aid programs in schools and food banks.  
+
+**👥 General Population**
+- Stay home if feeling unwell or exposed.  
+- Avoid large gatherings.  
+- Sanitize frequently touched surfaces.  
+- Help vulnerable household members with meals/supplements.
+""",
+    'High': """
+**🧑‍⚕️ Public Health Officials**
+- Activate distancing protocols: school closures, telework.  
+- Issue public health alerts via all media.  
+- Send mobile health units to hotspots.  
+- Deliver immune-boosting foods and supplements to vulnerable areas.  
+
+**👥 General Population**
+- Strictly follow health guidelines (stay home, wear masks, distance).  
+- Stay hydrated and eat vitamin-rich foods.  
+- Avoid non-essential travel.  
+- Monitor symptoms closely and seek care early if needed.
+"""
+}
+
+
+st.markdown("---")
+st.subheader("🛡️ Recommended Mitigation Measures")
+st.markdown(mitigation_guidance[risk_level])
 
 
 
