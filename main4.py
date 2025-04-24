@@ -239,7 +239,7 @@ st.plotly_chart(fig)
 # --- Mitigation Recommendations Dictionary ---
 mitigation_guidance = {
     'Minimal': """
-**🧑‍⚕️ Public Health Officials**
+**Public Health Officials**
 - Maintain routine flu surveillance and update emergency response protocols.  
 - Stockpile antivirals, testing kits, and PPE.  
 - Prepare vaccination outreach materials and risk communication templates.  
@@ -252,7 +252,7 @@ mitigation_guidance = {
 - Ensure adequate vitamin intake (especially D and C) through food or supplements.
 """,
     'Low': """
-**🧑‍⚕️ Public Health Officials**
+**Public Health Officials**
 - Begin early communication with local agencies and community partners.  
 - Emphasize flu vaccination in schools, elder care facilities, and workplaces.  
 - Coordinate with pharmacies on vitamin supplement supply (especially D and C).  
@@ -264,7 +264,7 @@ mitigation_guidance = {
 - Boost intake of immune-supporting foods: citrus, fatty fish, cereals, greens.
 """,
     'Medium': """
-**🧑‍⚕️ Public Health Officials**
+**Public Health Officials**
 - Expand targeted vaccination campaigns in higher-risk regions.  
 - Distribute regional health alerts (symptoms, when to seek care).  
 - Increase access to testing.  
@@ -277,13 +277,13 @@ mitigation_guidance = {
 - Help vulnerable household members with meals/supplements.
 """,
     'High': """
-**🧑‍⚕️ Public Health Officials**
+**Public Health Officials**
 - Activate distancing protocols: school closures, telework.  
 - Issue public health alerts via all media.  
 - Send mobile health units to hotspots.  
 - Deliver immune-boosting foods and supplements to vulnerable areas.  
 
-**👥 General Population**
+**General Population**
 - Strictly follow health guidelines (stay home, wear masks, distance).  
 - Stay hydrated and eat vitamin-rich foods.  
 - Avoid non-essential travel.  
@@ -293,7 +293,7 @@ mitigation_guidance = {
 
 # --- Display Mitigation Measures ---
 st.markdown("---")
-st.subheader("🛡️ Recommended Mitigation Measures")
+st.subheader("Recommended Mitigation Measures")
 
 if 'risk_level' in locals():
     st.markdown(mitigation_guidance.get(risk_level, "_No guidance available for this risk level._"))
