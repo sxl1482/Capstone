@@ -42,7 +42,7 @@ st.title("Flu Forecast Dashboard for 2025")
 
 # User inputs
 state_selected = st.selectbox("Please Select a State:", options=df['State'].unique())
-week_input = st.slider("Please Select a Week:", min_value=1, max_value=27, value=10)
+week_input = st.slider("Please Select a Week:", min_value=1, max_value=30, value=17)
 
 # Data filtering
 state_df = df[df['State'] == state_selected]
@@ -80,64 +80,96 @@ else:
 
 import plotly.express as px
 
-# --- 3-week forecast (Week X to X+2) ---
-forecast_df = state_df[(state_df['Week'] >= week_input) & (state_df['Week'] <= week_input + 2)]
-forecast_df = forecast_df.sort_values('Week').dropna(subset=['cases_per_100k'])
+# --- Plot logic ---
+if week_input == 30:
+    # Only show 1 chart: Weeks 28–30
+    forecast_df = state_df[state_df['Week'].between(28, 30)]
+    forecast_df = forecast_df.sort_values('Week').dropna(subset=['cases_per_100k'])
 
-st.subheader(f"Flu Forecasts for Weeks {week_input} to {week_input + 2}")
+    st.subheader("Flu Forecast for Weeks 28 to 30")
 
-if not forecast_df.empty:
-    fig = px.line(
-        forecast_df,
-        x='Week',
-        y='cases_per_100k',
-        markers=True,
-        title=f"3-Week Forecast for {state_selected} (Weeks {week_input} to {week_input + 2})",
-        hover_data={'Week': True, 'cases_per_100k': ':.1f'}
-    )
-    fig.update_traces(
-        line=dict(color='white'),
-        marker=dict(color='white'),
-        hoverlabel=dict(font=dict(size=16))
-    )
-    fig.update_layout(
-        paper_bgcolor='#0a1528',
-        plot_bgcolor='#0a1528',
-        font_color='white'
-    )
-    st.plotly_chart(fig)
+    if not forecast_df.empty:
+        fig = px.line(
+            forecast_df,
+            x='Week',
+            y='cases_per_100k',
+            markers=True,
+            title=f"{state_selected} Flu Forecast (Weeks 28–30)",
+            hover_data={'Week': True, 'cases_per_100k': ':.1f'}
+        )
+        fig.update_traces(
+            line=dict(color='white'),
+            marker=dict(color='white'),
+            hoverlabel=dict(font=dict(size=16))
+        )
+        fig.update_layout(
+            paper_bgcolor='#0a1528',
+            plot_bgcolor='#0a1528',
+            font_color='white'
+        )
+        st.plotly_chart(fig)
+    else:
+        st.markdown("No forecast data available.")
+
 else:
-    st.markdown("No forecast data available.")
+    # --- 3-week forecast (Week X to X+2) ---
+    forecast_df = state_df[(state_df['Week'] >= week_input) & (state_df['Week'] <= week_input + 2)]
+    forecast_df = forecast_df.sort_values('Week').dropna(subset=['cases_per_100k'])
 
+    st.subheader(f"Flu Forecasts for Weeks {week_input} to {week_input + 2}")
 
-# --- Extended forecast (Week X to Week 30) ---
-forecast_to_30_df = state_df[(state_df['Week'] >= week_input) & (state_df['Week'] <= 30)]
-forecast_to_30_df = forecast_to_30_df.sort_values('Week').dropna(subset=['cases_per_100k'])
+    if not forecast_df.empty:
+        fig = px.line(
+            forecast_df,
+            x='Week',
+            y='cases_per_100k',
+            markers=True,
+            title=f"3-Week Forecast for {state_selected} (Weeks {week_input} to {week_input + 2})",
+            hover_data={'Week': True, 'cases_per_100k': ':.1f'}
+        )
+        fig.update_traces(
+            line=dict(color='white'),
+            marker=dict(color='white'),
+            hoverlabel=dict(font=dict(size=16))
+        )
+        fig.update_layout(
+            paper_bgcolor='#0a1528',
+            plot_bgcolor='#0a1528',
+            font_color='white'
+        )
+        st.plotly_chart(fig)
+    else:
+        st.markdown("No forecast data available.")
 
-st.subheader(f"Extended Flu Forecasts for Weeks {week_input} to 30")
+    # --- Extended forecast (Week X to Week 30) ---
+    forecast_to_30_df = state_df[(state_df['Week'] >= week_input) & (state_df['Week'] <= 30)]
+    forecast_to_30_df = forecast_to_30_df.sort_values('Week').dropna(subset=['cases_per_100k'])
 
-if not forecast_to_30_df.empty:
-    fig2 = px.line(
-        forecast_to_30_df,
-        x='Week',
-        y='cases_per_100k',
-        markers=True,
-        title=f"Extended Forecast for {state_selected} (Weeks {week_input} to 30)",
-        hover_data={'Week': True, 'cases_per_100k': ':.1f'}
-    )
-    fig2.update_traces(
-        line=dict(color='white'),
-        marker=dict(color='white'),
-        hoverlabel=dict(font=dict(size=16))
-    )
-    fig2.update_layout(
-        paper_bgcolor='#0a1528',
-        plot_bgcolor='#0a1528',
-        font_color='white'
-    )
-    st.plotly_chart(fig2)
-else:
-    st.markdown("No forecast data available.")
+    st.subheader(f"Extended Flu Forecasts for Weeks {week_input} to 30")
+
+    if not forecast_to_30_df.empty:
+        fig2 = px.line(
+            forecast_to_30_df,
+            x='Week',
+            y='cases_per_100k',
+            markers=True,
+            title=f"Extended Forecast for {state_selected} (Weeks {week_input} to 30)",
+            hover_data={'Week': True, 'cases_per_100k': ':.1f'}
+        )
+        fig2.update_traces(
+            line=dict(color='white'),
+            marker=dict(color='white'),
+            hoverlabel=dict(font=dict(size=16))
+        )
+        fig2.update_layout(
+            paper_bgcolor='#0a1528',
+            plot_bgcolor='#0a1528',
+            font_color='white'
+        )
+        st.plotly_chart(fig2)
+    else:
+        st.markdown("No forecast data available.")
+
 
 # --- Choropleth Map ---
 st.subheader(f"Flu Forecasts Across the US in Week {week_input}")
@@ -270,7 +302,7 @@ mitigation_guidance = {
 - Increase access to testing.  
 - Support nutritional aid programs in schools and food banks.  
 
-**👥 General Population**
+**General Population**
 - Stay home if feeling unwell or exposed.  
 - Avoid large gatherings.  
 - Sanitize frequently touched surfaces.  
