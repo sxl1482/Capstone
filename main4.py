@@ -277,7 +277,7 @@ mitigation_guidance = {
 - Prepare vaccination outreach materials and risk communication templates.  
 - Promote general wellness campaigns (nutrition, physical activity, sleep hygiene).  
 
-**👥 General Population**
+**General Population**
 - Practice routine hygiene (handwashing, covering coughs).  
 - Stay current with annual flu vaccinations.  
 - Maintain healthy lifestyle: balanced nutrition, exercise, sleep.  
@@ -290,7 +290,7 @@ mitigation_guidance = {
 - Coordinate with pharmacies on vitamin supplement supply (especially D and C).  
 - Share risk trends with providers and EMS for mild prep measures.  
 
-**👥 General Population**
+**General Population**
 - Get vaccinated if not done yet.  
 - Begin limiting non-essential exposure to crowded areas.  
 - Boost intake of immune-supporting foods: citrus, fatty fish, cereals, greens.
