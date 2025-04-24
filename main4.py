@@ -236,7 +236,7 @@ if highlight_state_code:
 
 st.plotly_chart(fig)
 
-# Mitigation recommendations dictionary
+# --- Mitigation Recommendations Dictionary ---
 mitigation_guidance = {
     'Minimal': """
 **🧑‍⚕️ Public Health Officials**
@@ -291,10 +291,15 @@ mitigation_guidance = {
 """
 }
 
-
+# --- Display Mitigation Measures ---
 st.markdown("---")
 st.subheader("🛡️ Recommended Mitigation Measures")
-st.markdown(mitigation_guidance[risk_level])
+
+if 'risk_level' in locals():
+    st.markdown(mitigation_guidance.get(risk_level, "_No guidance available for this risk level._"))
+else:
+    st.markdown("_Risk level not available. Please select a week with forecast data._")
+
 
 
 
