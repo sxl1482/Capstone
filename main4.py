@@ -30,34 +30,37 @@ set_background("pictures/streamlit_background.jpg")
 st.markdown(
     """
     <style>
-    /* Global override for all text elements */
-    html, body, [class*="st-"], .st-emotion-cache, .block-container {
-        color: white !important;
+    /* Dropdown menu background and text */
+    .stSelectbox div[data-baseweb="select"] {
+        background-color: white !important;
+        color: black !important;
     }
 
-    /* Force headers white */
-    h1, h2, h3, h4, h5, h6 {
-        color: white !important;
+    /* Dropdown options (list) background and text */
+    .stSelectbox div[role="listbox"] {
+        background-color: white !important;
+        color: black !important;
     }
 
-    /* Force widget labels white */
-    label, .stSelectbox label, .stSlider label, .stRadio label, .stCheckbox label {
-        color: white !important;
+    /* Individual option items */
+    .stSelectbox div[role="option"] {
+        color: black !important;
     }
 
-    /* Force markdown elements white */
-    .stMarkdown p, .stMarkdown ul, .stMarkdown li, .stMarkdown span {
-        color: white !important;
+    /* Selected item text */
+    .stSelectbox div[data-baseweb="select"] span {
+        color: black !important;
     }
 
-    /* Remove Streamlit's theme-based override */
-    .css-ffhzg2 {
+    /* Label (above dropdown) stays white to match theme */
+    label {
         color: white !important;
     }
     </style>
     """,
     unsafe_allow_html=True
 )
+
 
 # Load data
 @st.cache_data
