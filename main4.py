@@ -30,7 +30,7 @@ set_background("pictures/streamlit_background.jpg")
 st.markdown(
     """
     <style>
-    /* Set global text to white */
+    /* Make entire app text white */
     html, body, [class*="st-"], .block-container {
         color: white !important;
     }
@@ -39,32 +39,38 @@ st.markdown(
         color: white !important;
     }
 
-    /* Selectbox (closed) appearance */
+    /* Selected dropdown display */
     .stSelectbox > div[data-baseweb="select"] {
         background-color: black !important;
         color: white !important;
         border: 1px solid #888 !important;
     }
 
-    /* Dropdown menu (expanded list) */
+    /* Full dropdown menu popup container */
+    div[data-baseweb="popover"] {
+        background-color: black !important;
+    }
+
+    /* Dropdown list container (actual listbox) */
     div[role="listbox"] {
         background-color: black !important;
         color: white !important;
+        border: none !important;
     }
 
-    /* Options in dropdown */
+    /* Dropdown option items */
     div[role="option"] {
-        color: white !important;
         background-color: black !important;
+        color: white !important;
     }
 
-    /* 🔥 Hovered option */
+    /* Hovered dropdown option */
     div[role="option"]:hover {
         background-color: black !important;
         color: white !important;
     }
 
-    /* Selected item inside selectbox */
+    /* Fix selected label inside selectbox */
     .stSelectbox span {
         color: white !important;
     }
@@ -72,6 +78,7 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
+
 
 
 
