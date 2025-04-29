@@ -26,6 +26,27 @@ def set_background(image_path):
     )
 
 set_background("pictures/streamlit_background.jpg")
+
+st.markdown(
+    """
+    <style>
+    /* Make all Streamlit markdown and text white */
+    .stMarkdown, .stText, .stSubheader, .stHeader, .stTitle, .stCaption, .stSelectbox, .stSliderLabel {
+        color: white !important;
+    }
+    /* Specifically force subheader color */
+    h1, h2, h3, h4, h5, h6, .st-emotion-cache-1avcm0n {
+        color: white !important;
+    }
+    /* Force Streamlit widget labels to white */
+    label {
+        color: white !important;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 # Load data
 @st.cache_data
 def load_data(url):
