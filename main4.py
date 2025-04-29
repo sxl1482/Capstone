@@ -30,31 +30,44 @@ set_background("pictures/streamlit_background.jpg")
 st.markdown(
     """
     <style>
-    /* Dropdown menu background and text */
+    /* 🔳 Force all app text white (except inside dropdown/tooltips) */
+    html, body, [class*="st-"], .block-container {
+        color: white !important;
+    }
+
+    /* Headers */
+    h1, h2, h3, h4, h5, h6 {
+        color: white !important;
+    }
+
+    /* Widget labels */
+    label {
+        color: white !important;
+    }
+
+    /* ❗ Keep dropdown menu white with black text */
     .stSelectbox div[data-baseweb="select"] {
         background-color: white !important;
         color: black !important;
     }
 
-    /* Dropdown options (list) background and text */
     .stSelectbox div[role="listbox"] {
         background-color: white !important;
         color: black !important;
     }
 
-    /* Individual option items */
     .stSelectbox div[role="option"] {
         color: black !important;
     }
 
-    /* Selected item text */
     .stSelectbox div[data-baseweb="select"] span {
         color: black !important;
     }
 
-    /* Label (above dropdown) stays white to match theme */
-    label {
-        color: white !important;
+    /* Tooltip hover content (don't force white to avoid conflict) */
+    .plotly-tooltip {
+        color: initial !important;
+        background: initial !important;
     }
     </style>
     """,
