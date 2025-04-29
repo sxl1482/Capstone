@@ -30,57 +30,27 @@ set_background("pictures/streamlit_background.jpg")
 st.markdown(
     """
     <style>
-    /* Make entire app text white */
+    /* Set global app text (not dropdowns) to white */
     html, body, [class*="st-"], .block-container {
         color: white !important;
     }
 
-    h1, h2, h3, h4, h5, h6, label, .stMarkdown {
+    /* Headers and markdown */
+    h1, h2, h3, h4, h5, h6,
+    .stMarkdown, .stText, .stSubheader, .stHeader, .stTitle, .stCaption {
         color: white !important;
     }
 
-    /* Selected dropdown display */
-    .stSelectbox > div[data-baseweb="select"] {
-        background-color: black !important;
-        color: white !important;
-        border: 1px solid #888 !important;
-    }
-
-    /* Full dropdown menu popup container */
-    div[data-baseweb="popover"] {
-        background-color: black !important;
-    }
-
-    /* Dropdown list container (actual listbox) */
-    div[role="listbox"] {
-        background-color: black !important;
-        color: white !important;
-        border: none !important;
-    }
-
-    /* Dropdown option items */
-    div[role="option"] {
-        background-color: black !important;
+    /* Widget labels */
+    label {
         color: white !important;
     }
 
-    /* Hovered dropdown option */
-    div[role="option"]:hover {
-        background-color: black !important;
-        color: white !important;
-    }
-
-    /* Fix selected label inside selectbox */
-    .stSelectbox span {
-        color: white !important;
-    }
+    /* EXCLUDE selectbox/dropdown styling on purpose */
     </style>
     """,
     unsafe_allow_html=True
 )
-
-
-
 
 
 # Load data
