@@ -30,16 +30,28 @@ set_background("pictures/streamlit_background.jpg")
 st.markdown(
     """
     <style>
-    /* Make all Streamlit markdown and text white */
-    .stMarkdown, .stText, .stSubheader, .stHeader, .stTitle, .stCaption, .stSelectbox, .stSliderLabel {
+    /* Global override for all text elements */
+    html, body, [class*="st-"], .st-emotion-cache, .block-container {
         color: white !important;
     }
-    /* Specifically force subheader color */
-    h1, h2, h3, h4, h5, h6, .st-emotion-cache-1avcm0n {
+
+    /* Force headers white */
+    h1, h2, h3, h4, h5, h6 {
         color: white !important;
     }
-    /* Force Streamlit widget labels to white */
-    label {
+
+    /* Force widget labels white */
+    label, .stSelectbox label, .stSlider label, .stRadio label, .stCheckbox label {
+        color: white !important;
+    }
+
+    /* Force markdown elements white */
+    .stMarkdown p, .stMarkdown ul, .stMarkdown li, .stMarkdown span {
+        color: white !important;
+    }
+
+    /* Remove Streamlit's theme-based override */
+    .css-ffhzg2 {
         color: white !important;
     }
     </style>
