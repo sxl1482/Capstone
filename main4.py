@@ -292,8 +292,7 @@ if highlight_state_code:
         textposition="top center",
         textfont=dict(
             color="black",
-            size=14,
-            family="Arial Black"  # Use a bold font family
+            size=12 # Use a bold font family
         ),
         hoverinfo="skip"
     )
