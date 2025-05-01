@@ -283,13 +283,19 @@ if highlight_state_code:
         geo="geo",
         mode="markers+text",
         marker=dict(
-            size=0.1,
-            line=dict(width=8, color='green')
+            size=0.1,  # Invisible marker
+            line=dict(width=8, color='green')  # Green outline
         ),
         name=f"{state_selected} (Selected)",
         showlegend=False,
         text=[state_selected],
         textposition="top center",
+        textfont=dict(
+            color="black",
+            size=14,
+            family="Arial",
+            bold=True  # Plotly doesn't use `bold`, so we handle it via font weight below
+        ),
         hoverinfo="skip"
     )
 
